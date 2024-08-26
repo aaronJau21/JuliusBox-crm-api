@@ -9,6 +9,24 @@ enum RoleUser {
   USER
 }
 
+enum Found {
+  WHATSAPP
+  MESSENGER
+  DIRECT_CALL
+  REFERENCE
+}
+
+enum Product {
+  TNEI
+  PAGE
+}
+
+enum Status {
+  POTENCIAL
+  ACTIVES
+  SUSPENDED
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,4 +41,79 @@ model User {
   user_name String   @unique
   password  String
   role      RoleUser @default(USER)
+}
+
+model ClAccounts {
+  id      Int       @id @default(autoincrement())
+  nombre  String
+  Clients Clients[]
+}
+
+model Package_Packs {
+  id      Int       @id @default(autoincrement())
+  name    String
+  monto   Float
+  Clients Clients[]
+}
+
+model Sb_categories {
+  id      Int       @id @default(autoincrement())
+  name    String?
+  Clients Clients[]
+}
+
+model Team_guies {
+  id      Int       @id @default(autoincrement())
+  name    String
+  Clients Clients[]
+}
+
+model Cl_Categories {
+  id      Int       @id @default(autoincrement())
+  name    String
+  Clients Clients[]
+}
+
+model Clients {
+  id Int @id @default(autoincrement())
+
+  clAccountsId Int
+  clAccoint    ClAccounts @relation(fields: [clAccountsId], references: [id])
+
+  fullName      String?
+  phone1        String?
+  phone2        String?
+  city_zip_code String?
+
+  package_pack_id Int
+  package_pack    Package_Packs @relation(fields: [package_pack_id], references: [id])
+
+  date_ads      String?
+  cities_jobs   String?
+  services_list String?
+
+  sb_category_id Int
+  sb_categories  Sb_categories @relation(fields: [sb_category_id], references: [id])
+
+  team_guy_id Int
+  team_guis   Team_guies @relation(fields: [team_guy_id], references: [id])
+
+  cl_main_area String?
+  cl_sub_area1 String?
+  cl_sub_area2 String?
+  suscripcion  Boolean @default(false)
+
+  cl_category   Int
+  cl_Categories Cl_Categories @relation(fields: [cl_category], references: [id])
+
+  cats            String  @default("n/a")
+  su_serbiz_site  String?
+  su_cuenta       String?
+  pending_to_do   String?
+  found           Found
+  product         Product
+  status          Status
+  zip_code        String?
+  Business_tittle String?
+  notes_updates   String? @db.Text
 }
